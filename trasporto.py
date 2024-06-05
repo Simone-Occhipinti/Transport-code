@@ -137,8 +137,7 @@ class estimator:
     
     def new_interaction(self, mm=materiale.material, nn = particle):
         index = np.where(nn.energy<=self.range)[0][0]
-        #self.count[self.iter-1][index-1] += nn.weight/mm.xs_scattering(self.ref[index-1])
-        self.count[self.iter-1][index-1] += nn.weight
+        self.count[self.iter-1][index-1] += nn.weight/mm.xs_scattering(self.ref[index-1])
 
     def new_iteration(self):
         self.count.append(np.zeros(len(self.ref)))
@@ -148,7 +147,13 @@ class estimator:
         avg = np.zeros(len(self.ref))
         for ii in range(self.iter):
             avg += self.count[ii]/self.iter
-        return avg
+        
+        mom2 = np.zeros(len(avg))
+        for ii in range(self.iter):
+            mom2 += (self.count[ii])**2/self.iter
+        var = mom2 - avg**2
+        return [avg, var]
+
 
 def sample_watt(aa=float, bb=float):
     kk = 1 + bb/(8*aa)

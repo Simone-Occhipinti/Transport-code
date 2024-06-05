@@ -87,3 +87,5 @@ class material:
         return out
     def xs_general(self, en=float):
         return [self.xs_scattering(en),self.xs_fission(en),self.xs_capture(en)]
+    
+        
